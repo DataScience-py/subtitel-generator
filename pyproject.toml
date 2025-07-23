@@ -1,0 +1,54 @@
+[project]
+name = "subtitel-generator"
+version = "0.1.0"
+description = "This is a project for generating subtitles (use your power PC)."
+authors = [
+    {name = "Anton Golubchikov",email = "anton1programmist@gmail.com"}
+]
+readme = "README.md"
+requires-python = ">=3.12"
+license = { file = "LICENSE" }
+dependencies = [
+]
+
+[tool.poetry]
+packages = [{include = "subtitel_generator", from = "src"}]
+
+
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.12.4"
+mypy = "^1.17.0"
+pytest = "^8.4.1"
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+# Ruff configuration
+
+[tool.ruff]
+line-length = 100
+
+target-version = "py312"
+
+[tool.ruff.lint]
+# See list of rules at: https://docs.astral.sh/ruff/rules/
+select = ["F", "E", "W", "I", "B", "N", "D", "PT", "PYI", "RET", "RUF"]
+
+[tool.ruff.lint.pycodestyle]
+max-doc-length = 100
+
+[tool.ruff.lint.pydocstyle]
+convention = "numpy"
+
+# Mypy configuration
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+warn_unused_configs = true
+
+# pytets configuration
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
