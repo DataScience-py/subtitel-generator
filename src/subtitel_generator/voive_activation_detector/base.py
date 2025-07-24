@@ -1,7 +1,8 @@
 """Base VAD class for all VAD implementations."""
 
 from abc import ABC, abstractmethod
-from typing import Any, NamedTuple
+from pathlib import Path
+from typing import NamedTuple
 
 
 class SppechingResult(NamedTuple):
@@ -15,7 +16,7 @@ class BaseVAD(ABC):
     """Base Voice Activation Detection class (Abstract Base Class)."""
 
     @abstractmethod
-    def vad_detect(self, audio: Any) -> list[SppechingResult]:
+    def vad_detect(self, audio_file: str | Path) -> list[SppechingResult]:
         """
         Generate list speeches.
 

@@ -9,6 +9,7 @@ readme = "README.md"
 requires-python = ">=3.12"
 license = { file = "LICENSE" }
 dependencies = [
+    "silero-vad (>=5.1.2,<6.0.0)"
 ]
 
 [tool.poetry]

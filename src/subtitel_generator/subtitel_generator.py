@@ -14,7 +14,9 @@ Supported languages:
 Generate sub for russian user from english text.
 """
 
-from .voive_activation_detector import BaseVAD
+from pathlib import Path
+
+from .voive_activation_detector import BaseVAD, SppechingResult
 
 
 class SubtitelGenerator:
@@ -30,3 +32,7 @@ class SubtitelGenerator:
             VoiceActivationDetection class.
         """
         self.vad = vad
+
+    def vad_generate(self, audio_file: str | Path) -> list[SppechingResult]:
+        """Return output from vad models."""
+        return self.vad.vad_detect(audio_file)
