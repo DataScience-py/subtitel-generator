@@ -2,21 +2,15 @@
 
 from abc import ABC, abstractmethod
 from pathlib import Path
-from typing import NamedTuple
 
-
-class SppechingResult(NamedTuple):
-    """Result of VAD detection."""
-
-    start: float
-    end: float
+from subtitel_generator.subtitel_model import Subtitels
 
 
 class BaseVAD(ABC):
     """Base Voice Activation Detection class (Abstract Base Class)."""
 
     @abstractmethod
-    def vad_detect(self, audio_file: str | Path) -> list[SppechingResult]:
+    def vad_detect(self, audio_file: str | Path) -> list[Subtitels]:
         """
         Generate list speeches.
 

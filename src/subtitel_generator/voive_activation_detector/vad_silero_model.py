@@ -8,7 +8,9 @@ from pathlib import Path
 
 from silero_vad import get_speech_timestamps, load_silero_vad, read_audio
 
-from .base import BaseVAD, SppechingResult
+from subtitel_generator.subtitel_model import Subtitels
+
+from .base import BaseVAD
 
 
 class VADSileroDetector(BaseVAD):
@@ -18,7 +20,7 @@ class VADSileroDetector(BaseVAD):
         """Initialize silero model for vad."""
         self.model = load_silero_vad()
 
-    def vad_detect(self, audio_file: str | Path) -> list[SppechingResult]:
+    def vad_detect(self, audio_file: str | Path) -> list[Subtitels]:
         """
         vad_detect List of speech results.
 
@@ -42,11 +44,11 @@ class VADSileroDetector(BaseVAD):
         )
         print(f"{speeches=}")
 
-        result: list[SppechingResult] = []
+        result: list[Subtitels] = []
         for speech in speeches:
             print(f"{speech=}")
             result.append(
-                SppechingResult(start=speech["start"], end=speech["end"])
+                Subtitels(start=speech["start"], end=speech["end"], text="")
             )
 
         return result
