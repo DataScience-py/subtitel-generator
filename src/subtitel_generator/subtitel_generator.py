@@ -45,3 +45,8 @@ class SubtitelGenerator:
     ) -> list[Subtitels]:
         """Generate text for subtitel."""
         return self.stt.stt_generate(audio_file, timesamps_speeches)
+
+    def run(self, audio_file: str | Path) -> None:
+        """Run the application."""
+        subtitels = self.vad_generate(audio_file)
+        subtitels = self.stt_generate(audio_file, subtitels)

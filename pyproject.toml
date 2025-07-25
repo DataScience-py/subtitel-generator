@@ -1,6 +1,6 @@
 [project]
 name = "subtitel-generator"
-version = "0.1.0"
+version = "1.0.0"
 description = "This is a project for generating subtitles (use your power PC)."
 authors = [
     {name = "Anton Golubchikov",email = "anton1programmist@gmail.com"}
@@ -9,7 +9,8 @@ readme = "README.md"
 requires-python = ">=3.12"
 license = { file = "LICENSE" }
 dependencies = [
-    "silero-vad (>=5.1.2,<6.0.0)"
+    "silero-vad (>=5.1.2,<6.0.0)",
+    "vosk (>=0.3.45,<0.4.0)"
 ]
 
 [tool.poetry]
