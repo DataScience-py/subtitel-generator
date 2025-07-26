@@ -1,52 +1,53 @@
 """
 Voice activation detection module.
 
-Use vosk-vad model to detect voice activation.
+Use silero-vad for voice activation detection module.
+
+Thanks snakers4 for the silero-vad library.
+https://github.com/snakers4/silero-vad
 """
 
 from pathlib import Path
 
 from silero_vad import get_speech_timestamps, load_silero_vad, read_audio
 
+from subtitel_generator.logger import get_logger
 from subtitel_generator.subtitel_model import Subtitels
 
 from .base import BaseVAD
 
 
-class VADSileroDetector(BaseVAD):
-    """Vosk voice activation detection module."""
+class VADSilero(BaseVAD):
+    """Silero-vad class for speech detection."""
 
     def __init__(self) -> None:
-        """Initialize silero model for vad."""
+        """__init__ load silero-vad model."""
+        self.logger = get_logger("SileroVad")
         self.model = load_silero_vad()
 
-    def vad_detect(self, audio_file: str | Path) -> list[Subtitels]:
+    def detect(self, audio_file_path: str | Path) -> list[Subtitels]:
         """
-        vad_detect List of speech results.
+        Detect speech in audio file.
 
         Parameters
         ----------
-        audio : str | Path
-            path to audio file
+        audio_file_path : str | Path
+            path to audio file, when need generate vad result.
 
         Returns
         -------
-        list[SppechingResult]
-            List of speech results
+        list[Subtitels]
+            list of times, when have speech.
         """
-        # TODO: remove this print and use logger
-        print("START SPEECH")
-        wav = read_audio(audio_file)
+        wav = read_audio(audio_file_path)
         speeches = get_speech_timestamps(
             wav,
             self.model,
             return_seconds=True,
         )
-        print(f"{speeches=}")
 
         result: list[Subtitels] = []
         for speech in speeches:
-            print(f"{speech=}")
             result.append(
                 Subtitels(start=speech["start"], end=speech["end"], text="")
             )

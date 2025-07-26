@@ -10,7 +10,8 @@ class BaseSTT(ABC):
     """Base speech to text model."""
 
     @abstractmethod
-    def stt_generate(
-        self, audio_file: str | Path, timestamps_speech: list[Subtitels]
+    def generate(
+        self, audio_file_path: str | Path, timestamps_speeches: list[Subtitels]
     ) -> list[Subtitels]:
         """ADD text for subtitels."""
+        raise NotImplementedError("Method not implemented.")
