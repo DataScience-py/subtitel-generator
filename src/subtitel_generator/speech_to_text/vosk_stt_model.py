@@ -8,6 +8,7 @@ See: https://alphacephei.com/vosk/models
 
 import io
 import json
+import os
 import wave
 from pathlib import Path
 
@@ -23,9 +24,16 @@ from .base import BaseSTT
 class VoskSTT(BaseSTT):
     """Vosk model for STT."""
 
-    def __init__(self, model_path: str | Path) -> None:
+    def _path_to_model(self) -> str:
+        """Path to model."""
+        path = Path(__file__).parent.parent.parent.parent / "models" / "vosk"
+        print(os.listdir(path))
+        return os.path.join(str(path), os.listdir(path)[0])
+
+    def __init__(self) -> None:
         """Init Vosk model for STT."""
         self.logger = get_logger("VoskSTT")
+        model_path = self._path_to_model()
         self.model = Model(model_path)
         self.wf: wave.Wave_read | None = None  # audio bytes
 

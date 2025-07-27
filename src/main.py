@@ -10,9 +10,7 @@ from subtitel_generator.voive_activation_detector import (
 # cretate instance of the class with models
 s = SubtitelGenerator(
     vad=VADSilero(),
-    stt=VoskSTT(
-        "/home/anton/projects/subtitel-generator/models/vosk-model-small-en-us-0.15"
-    ),  # path to vosk model
+    stt=VoskSTT(),  # path to vosk model
     file_generater=SrtSubtitleFileGenerator(),
 )
 

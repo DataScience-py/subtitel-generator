@@ -18,9 +18,7 @@ def en_generator() -> SubtitelGenerator:
     """Model for en sub."""
     return SubtitelGenerator(
         vad=VADSilero(),
-        stt=VoskSTT(
-            "/home/anton/projects/subtitel-generator/models/vosk-model-small-en-us-0.15"
-        ),
+        stt=VoskSTT(),
         file_generater=SrtSubtitleFileGenerator(),
     )
 
