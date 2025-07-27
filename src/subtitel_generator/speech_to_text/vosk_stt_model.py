@@ -26,8 +26,9 @@ class VoskSTT(BaseSTT):
 
     def _path_to_model(self) -> str:
         """Path to model."""
+        self.logger.debug("Start loading model")
         path = Path(__file__).parent.parent.parent.parent / "models" / "vosk"
-        print(os.listdir(path))
+        self.logger.debug(f"choice this model {os.listdir(path)}")
         return os.path.join(str(path), os.listdir(path)[0])
 
     def __init__(self) -> None:
