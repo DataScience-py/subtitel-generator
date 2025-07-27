@@ -12,7 +12,7 @@ A Python project for generating subtitles from audio files using Voice Activity 
 
 - [x] ~~Voice Activity Detection (VAD) using Silero VAD~~
 - [x] ~~Speech-to-Text (STT) using Vosk (English )~~
-- [ ] Support any vosk model. (Now need change source code)
+- [x] ~~Support any vosk model.~~
 - [x] ~~Subtitle file generation (SRT format)~~
 - [ ] Translation support for other languages
 - [ ] Text-to-Speech (TTS) integration
@@ -42,7 +42,8 @@ A Python project for generating subtitles from audio files using Voice Activity 
    ```bash
    poetry install
    ```
-3. Download the required Vosk model and place it in the `models/` directory (already included: `vosk-model-small-en-us-0.15`).
+3. Download the required Vosk model and place its folder inside the `models/vosk/` directory. For example, for English, use `models/vosk/vosk-en` (where `vosk-en` is any Vosk model folder you want to use).
+   No additional setup is required: the program will automatically use the model from the specified folder.
 
 ---
 
@@ -58,11 +59,11 @@ from subtitel_generator.voive_activation_detector import VADSilero
 
 s = SubtitelGenerator(
     vad=VADSilero(),
-    stt=VoskSTT("models/vosk-model-small-en-us-0.15"),
+    stt=VoskSTT(),
     file_generater=SrtSubtitleFileGenerator(),
 )
 
-s.generate(audio_file_path="example/Example_audio_endlish_small.wav")
+s.generate(audio_file_path="example/Example_audio_endlish_small.wav") # Path to the audio file
 ```
 
 ---
