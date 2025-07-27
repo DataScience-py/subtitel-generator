@@ -36,6 +36,6 @@ class SrtSubtitleFileGenerator(BaseSubtitelFileGenerator):
             for i, speech in enumerate(speeches):
                 file.write(f"{i + 1}\n")
                 file.write(f"{speech['start']} --> {speech['end']}\n")
-                file.write(f"{speech['text']}\n\n")
+                file.write(f"{speech['text']}\n")
 
         self.logger.debug(f"File {subtitel_file_path} created.")
