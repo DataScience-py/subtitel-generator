@@ -12,7 +12,7 @@ A Python project for generating subtitles from audio files using Voice Activity 
 
 - [x] ~~Voice Activity Detection (VAD) using Silero VAD~~
 - [x] ~~Speech-to-Text (STT) using Vosk (English )~~
-- [] Support any vosk model. (Now need change source code)
+- [ ] Support any vosk model. (Now need change source code)
 - [x] ~~Subtitle file generation (SRT format)~~
 - [ ] Translation support for other languages
 - [ ] Text-to-Speech (TTS) integration
