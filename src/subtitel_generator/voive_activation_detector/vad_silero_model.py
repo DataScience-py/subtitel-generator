@@ -49,7 +49,12 @@ class VADSilero(BaseVAD):
         result: list[Subtitels] = []
         for speech in speeches:
             result.append(
-                Subtitels(start=speech["start"], end=speech["end"], text="")
+                Subtitels(
+                    start=speech["start"],
+                    end=speech["end"],
+                    text="",
+                    target="",
+                )
             )
 
         return result

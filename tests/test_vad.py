@@ -10,6 +10,7 @@ import pytest
 from subtitel_generator import SubtitelGenerator
 from subtitel_generator.file_generator import SrtSubtitleFileGenerator
 from subtitel_generator.speech_to_text import VoskSTT
+from subtitel_generator.translator import GoogleDeepTranslator
 from subtitel_generator.voive_activation_detector import VADSilero
 
 
@@ -20,6 +21,7 @@ def en_generator() -> SubtitelGenerator:
         vad=VADSilero(),
         stt=VoskSTT(),
         file_generater=SrtSubtitleFileGenerator(),
+        translator=GoogleDeepTranslator(),
     )
 
 

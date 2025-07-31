@@ -156,6 +156,7 @@ class VoskSTT(BaseSTT):
                         start=segment_start,
                         end=segment_end,
                         text=recognized_text,
+                        target=""
                     )
                 )
                 self.logger.debug(

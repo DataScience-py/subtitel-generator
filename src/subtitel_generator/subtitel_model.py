@@ -22,3 +22,4 @@ class Subtitels(TypedDict):
     start: float
     end: float
     text: str
+    target: str
