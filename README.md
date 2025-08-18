@@ -35,7 +35,7 @@ A Python project for generating subtitles from audio files using Voice Activity 
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/subtitel-generator.git
+   git clone https://github.com/DataSciense-py/subtitel-generator.git
    cd subtitel-generator
    ```
 2. Install dependencies using [Poetry](https://python-poetry.org/):
