@@ -11,8 +11,8 @@ from pathlib import Path
 
 from silero_vad import get_speech_timestamps, load_silero_vad, read_audio
 
-from subtitel_generator.logger import get_logger
 from subtitel_generator.subtitel_model import Subtitels
+from subtitel_generator.utils.logger import get_logger
 
 from .base import BaseVAD
 

@@ -17,10 +17,11 @@ from pathlib import Path
 from time import process_time
 
 from .file_generator import BaseSubtitelFileGenerator
-from .logger import get_logger
 from .speech_to_text import BaseSTT
 from .subtitel_model import Subtitels
 from .translator import BaseTranslator
+from .utils import timer
+from .utils.logger import get_logger
 from .voive_activation_detector import BaseVAD
 
 
@@ -50,13 +51,13 @@ class SubtitelGenerator:
             Now is always now. Will generate voice from text.
         """
         self.logger: Logger = get_logger("SubtitelGenerator")
-        self.logger.debug("SubtitelGenerator init")
         self.vad: BaseVAD = vad
         self.stt: BaseSTT = stt
         self.translater = translator
         self.tts = tts
         self.file_generater = file_generater
 
+    @timer
     def vad_generate(self, audio_file_path: str | Path) -> list[Subtitels]:
         """
         vad_generate return result from voice activation detector.
@@ -71,17 +72,9 @@ class SubtitelGenerator:
         list[Subtitels]
             List of times, when need subtitels. label text is empty string.
         """
-        self.logger.debug(f"Start generate times from {audio_file_path}")
-        start_timer = process_time()
-        result = self.vad.detect(audio_file_path=audio_file_path)
-        end_timer = process_time()
-        self.logger.debug(
-            f"""Finish generate times from {audio_file_path}.
-            Result: {result} /
-            Times: {end_timer - start_timer} seconds"""
-        )
-        return result
+        return self.vad.detect(audio_file_path=audio_file_path)
 
+    @timer
     def stt_generate(
         self, audio_file_path: str | Path, timesamps_speeches: list[Subtitels]
     ) -> list[Subtitels]:
@@ -101,20 +94,12 @@ class SubtitelGenerator:
         list[Subtitels]
             List of times with subtitels.
         """
-        self.logger.debug(f"Start generate text from {audio_file_path}")
-        start_timer = process_time()
-        result = self.stt.generate(
+        return self.stt.generate(
             audio_file_path=audio_file_path,
             timestamps_speeches=timesamps_speeches,
         )
-        end_timer = process_time()
-        self.logger.debug(
-            f"Finish generate text from {audio_file_path}."
-            f"Result: {result}"
-            f"Times: {end_timer - start_timer} seconds"
-        )
-        return result
 
+    @timer
     def file_generate(
         self,
         audio_file_path: str | Path,
@@ -138,18 +123,11 @@ class SubtitelGenerator:
         None
             Return nthing. CREATE FILE!
         """
-        self.logger.debug(f"Start generate text from {audio_file_path}")
-        start_timer = process_time()
-        self.file_generater.generate(
+        return self.file_generater.generate(
             audio_file_path=audio_file_path, speeches=speeches, target=target
         )
-        end_timer = process_time()
-        self.logger.debug(
-            f"Finish generate file from {audio_file_path}."
-            f"FILE CREATED"
-            f"Times: {end_timer - start_timer} seconds"
-        )
 
+    @timer
     def translate(self, speeches: list[Subtitels]) -> list[Subtitels]:
         """
         Translate text from source to target language.
@@ -164,16 +142,9 @@ class SubtitelGenerator:
         list[Subtitels]
             list of times with speeches (text)
         """
-        self.logger.debug("Start generate translate")
-        start_timer = process_time()
-        result = self.translater.generate(speeches=speeches)
-        end_timer = process_time()
-        self.logger.debug(
-            f"Finish generate translate."
-            f"Times: {end_timer - start_timer} seconds"
-        )
-        return result
+        return self.translater.generate(speeches=speeches)
 
+    @timer
     def generate(self, audio_file_path: str | Path) -> None:
         """
         Generate create subtitels from audio file.
@@ -183,21 +154,15 @@ class SubtitelGenerator:
         audio_file_path : str | Path
             path to audio file, where we need generate subtitels
         """
-        self.logger.debug(f"Start generate subtitels from {audio_file_path}")
-        start_timer = process_time()
         subtitels = self.vad_generate(audio_file_path=audio_file_path)
+
         subtitels = self.stt_generate(
             audio_file_path=audio_file_path, timesamps_speeches=subtitels
         )
+
         subtitels = self.translate(speeches=subtitels)
-        print(subtitels)
+
         self.file_generate(
             audio_file_path=audio_file_path,
             speeches=subtitels,
-        )
-        end_timer = process_time()
-        self.logger.debug(
-            f"""Finish generate subtitels from {audio_file_path}.
-            Result: {subtitels}
-            Times: {end_timer - start_timer} seconds"""
         )

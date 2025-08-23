@@ -15,8 +15,8 @@ from pathlib import Path
 from pydub import AudioSegment
 from vosk import KaldiRecognizer, Model
 
-from subtitel_generator.logger import get_logger
 from subtitel_generator.subtitel_model import Subtitels
+from subtitel_generator.utils.logger import get_logger
 
 from .base import BaseSTT
 
@@ -28,6 +28,7 @@ class VoskSTT(BaseSTT):
         """Path to model."""
         self.logger.debug("Start loading model")
         path = Path(__file__).parent.parent.parent.parent / "models" / "vosk"
+        print(f"model path {path}")
         self.logger.debug(f"choice this model {os.listdir(path)}")
         return os.path.join(str(path), os.listdir(path)[0])
 
@@ -156,7 +157,7 @@ class VoskSTT(BaseSTT):
                         start=segment_start,
                         end=segment_end,
                         text=recognized_text,
-                        target=""
+                        target="",
                     )
                 )
                 self.logger.debug(

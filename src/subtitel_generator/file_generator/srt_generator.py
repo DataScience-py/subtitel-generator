@@ -4,8 +4,8 @@ import os
 from pathlib import Path
 from typing import Literal
 
-from subtitel_generator.logger import get_logger
 from subtitel_generator.subtitel_model import Subtitels
+from subtitel_generator.utils.logger import get_logger
 
 from .base import BaseSubtitelFileGenerator
 
