@@ -18,7 +18,7 @@ A Python project for generating subtitles from audio files using Voice Activity 
 - [x] ~~Subtitle file generation (SRT format)~~
 - [ ] Translation support for other languages
 - [ ] Text-to-Speech (TTS) integration
-- [ ] CLI interface
+- [x] ~~CLI interface~~
 - [ ] GUI interface
 - [ ] Docker support
 
@@ -68,16 +68,33 @@ s = SubtitelGenerator(
 s.generate(audio_file_path="example/Example_audio_endlish_small.wav") # Path to the audio file
 ```
 
+
+Or you can use the CLI interface:
+
+```bash
+cd src
+
+python cli.py
+```
+
+And write full file path (audio or video)
+
 ---
 
 ## Project Structure
 
-- `src/subtitel_generator/` — Main package
-  - `subtitel_generator.py` — Main orchestration class
-  - `file_generator/` — Subtitle file generators (e.g., SRT)
-  - `speech_to_text/` — Speech-to-text models (Vosk)
-  - `voive_activation_detector/` — Voice activity detection (Silero)
-  - `logger/` — Logging utilities
+- `src/` — Source code
+  - `subtitel_generator/` — Main package
+    - `__init__.py` — Package initialization
+    - `subtitel_model` - Subtitel model
+    - `subtitel_generator.py` — Main orchestration class
+    - `file_generator/` — Subtitle file generators (e.g., SRT)
+    - `speech_to_text/` — Speech-to-text models (Vosk)
+    - `voive_activation_detector/` — Voice activity detection (Silero)
+    - `utils/` — utilities
+      - `logging` — Logging utilities
+  - `cli.py` — Command-line interface
+  - `main.py` — Main script
 - `models/` — Pretrained models (e.g., Vosk)
 - `example/` — Example audio files
 - `tests/` — Unit tests
