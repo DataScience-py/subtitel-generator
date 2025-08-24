@@ -8,6 +8,8 @@ A Python project for generating subtitles from audio files using Voice Activity 
 
 ---
 
+**You can see results of the project on example folder.**
+
 ## Features Checklist
 
 - [x] ~~Voice Activity Detection (VAD) using Silero VAD~~
@@ -100,3 +102,8 @@ This project is licensed under the terms of the [APACHE2.0 License](LICENSE).
 ## Contributing
 
 Contributions are welcome! Please open issues or submit pull requests.
+
+
+## Thanks
+
+- [Test video](https://www.youtube.com/watch?v=jBaALAcPjBQ) Автор: [shovonrdm](https://www.youtube.com/@shovonrdm)

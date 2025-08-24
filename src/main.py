@@ -18,6 +18,5 @@ s = SubtitelGenerator(
 
 # generate subtitels from audio file
 s.generate(
-    audio_file_path="/home/anton/projects/subtitel-generator/example/Example_audio_endlish_small.wav"
-    # path to audio file
+    file_path="/home/anton/projects/subtitel-generator/example/English drama for learning English _  Real life English conversation.mp4"
 )

@@ -15,6 +15,9 @@ We can use any models for generate subtitel. (your own or our)
 from logging import Logger
 from pathlib import Path
 
+import magic
+from moviepy import VideoFileClip
+
 from .file_generator import BaseSubtitelFileGenerator
 from .speech_to_text import BaseSTT
 from .subtitel_model import Subtitels, Timestamps
@@ -144,14 +147,13 @@ class SubtitelGenerator:
             else speeches
         )
 
-    @timer
-    def generate(self, audio_file_path: str | Path) -> None:
+    def generate_from_audio(self, audio_file_path: str | Path) -> None:
         """
         Generate create subtitels from audio file.
 
         Parameters
         ----------
-        audio_file_path : str | Path
+        file_path : str | Path
             path to audio file, where we need generate subtitels
         """
         timesamps_speeches = self.vad_generate(audio_file_path=audio_file_path)
@@ -166,3 +168,26 @@ class SubtitelGenerator:
             audio_file_path=audio_file_path,
             speeches=subtitels,
         )
+
+    def generate(self, file_path: str | Path) -> None:
+        audio_file_path: str | None = None
+        if magic.from_file(file_path, mime=True)[:5] == "video":
+            audio_file_path = self.convert_video_to_audio(str(file_path))
+        self.generate_from_audio(
+            audio_file_path=audio_file_path
+            if audio_file_path is not None
+            else file_path
+        )
+
+    def convert_video_to_audio(
+        self,
+        src_path: str,
+    ) -> str:
+        clip = VideoFileClip(src_path)
+        out_path = f"{src_path.rsplit('.', 1)[0]}.wav"
+        clip.audio.write_audiofile(
+            out_path,
+            logger=None,
+        )
+        clip.close()
+        return out_path
