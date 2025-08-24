@@ -14,7 +14,6 @@ class BaseSubtitelFileGenerator(ABC):
         self,
         audio_file_path: str | Path,
         speeches: list[Subtitels],
-        target: bool,
     ) -> None:
         """
         Generate Create file.
@@ -25,6 +24,4 @@ class BaseSubtitelFileGenerator(ABC):
             path to audio file
         speeches : list[Subtitels]
             list of times snd text
-        trget : bool
-            if True, generate from target speeches
         """

@@ -22,6 +22,6 @@ class GoogleDeepTranslator(BaseTranslator):
         )
 
         for speech, target in zip(speeches, target_list, strict=False):
-            speech["target"] = target
+            speech["text"] = target
 
         return speeches

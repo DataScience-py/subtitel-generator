@@ -3,7 +3,7 @@
 from abc import ABC, abstractmethod
 from pathlib import Path
 
-from subtitel_generator.subtitel_model import Subtitels
+from subtitel_generator.subtitel_model import Subtitels, Timestamps
 
 
 class BaseSTT(ABC):
@@ -11,7 +11,9 @@ class BaseSTT(ABC):
 
     @abstractmethod
     def generate(
-        self, audio_file_path: str | Path, timestamps_speeches: list[Subtitels]
+        self,
+        audio_file_path: str | Path,
+        timestamps_speeches: list[Timestamps],
     ) -> list[Subtitels]:
         """ADD text for subtitels."""
         raise NotImplementedError("Method not implemented.")

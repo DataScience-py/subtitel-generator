@@ -21,7 +21,6 @@ class SrtSubtitleFileGenerator(BaseSubtitelFileGenerator):
         self,
         audio_file_path: str | Path,
         speeches: list[Subtitels],
-        target: bool,
     ) -> None:
         """
         Generate create file for .srt file.
@@ -37,9 +36,7 @@ class SrtSubtitleFileGenerator(BaseSubtitelFileGenerator):
         """
         base_path, _ = os.path.splitext(str(audio_file_path))
         subtitel_file_path = base_path + ".srt"
-        text: Literal["text", "target"] = "text"
-        if target:
-            text = "target"
+        text: Literal["text"] = "text"
 
         with open(subtitel_file_path, "w", encoding="utf-8") as file:
             for i, speech in enumerate(speeches):
@@ -48,4 +45,4 @@ class SrtSubtitleFileGenerator(BaseSubtitelFileGenerator):
                 file.write(f"{speech['start']} --> {speech['end']}\n")
                 file.write(f"{speech[text]}\n")
 
-        self.logger.debug(f"File {subtitel_file_path} created.")
+        self.logger.info(f"File {subtitel_file_path} created.")

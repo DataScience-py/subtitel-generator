@@ -14,11 +14,10 @@ We can use any models for generate subtitel. (your own or our)
 
 from logging import Logger
 from pathlib import Path
-from time import process_time
 
 from .file_generator import BaseSubtitelFileGenerator
 from .speech_to_text import BaseSTT
-from .subtitel_model import Subtitels
+from .subtitel_model import Subtitels, Timestamps
 from .translator import BaseTranslator
 from .utils import timer
 from .utils.logger import get_logger
@@ -33,32 +32,30 @@ class SubtitelGenerator:
         vad: BaseVAD,
         stt: BaseSTT,
         file_generater: BaseSubtitelFileGenerator,
-        translator: BaseTranslator,
-        tts: None = None,
+        translator: BaseTranslator | None = None,
     ) -> None:
         """
-        __init__ for the class.
+        __init__ object of the class.
 
         Parameters
         ----------
         vad : BaseVAD
-            VoiceActivationDetection class.
+            Voioce activation detector class
         stt : BaseSTT
-            SpeechToText class.
-        translator : None
-            Now is always now. Will translate text.
-        tts : None
-            Now is always now. Will generate voice from text.
+            Speech to text class
+        file_generater : BaseSubtitelFileGenerator
+            when generate subtitels
+        translator : BaseTranslator | None, optional
+            translator text, by default None
         """
         self.logger: Logger = get_logger("SubtitelGenerator")
         self.vad: BaseVAD = vad
         self.stt: BaseSTT = stt
         self.translater = translator
-        self.tts = tts
         self.file_generater = file_generater
 
     @timer
-    def vad_generate(self, audio_file_path: str | Path) -> list[Subtitels]:
+    def vad_generate(self, audio_file_path: str | Path) -> list[Timestamps]:
         """
         vad_generate return result from voice activation detector.
 
@@ -69,14 +66,14 @@ class SubtitelGenerator:
 
         Returns
         -------
-        list[Subtitels]
+        list[Timestamps]
             List of times, when need subtitels. label text is empty string.
         """
         return self.vad.detect(audio_file_path=audio_file_path)
 
     @timer
     def stt_generate(
-        self, audio_file_path: str | Path, timesamps_speeches: list[Subtitels]
+        self, audio_file_path: str | Path, timesamps_speeches: list[Timestamps]
     ) -> list[Subtitels]:
         """
         stt_generate return result from speech to text.
@@ -86,13 +83,13 @@ class SubtitelGenerator:
         audio_file_path : str | Path
             path to audio file, where we need generate text
 
-        timesamps_speeches : list[Subtitels]
-            List of times, when need subtitels. label text is empty string.
+        timesamps_speeches : list[Timestamps]
+            List of times, when need subtitels
 
         Returns
         -------
         list[Subtitels]
-            List of times with subtitels.
+            List of times with subtitels
         """
         return self.stt.generate(
             audio_file_path=audio_file_path,
@@ -104,7 +101,6 @@ class SubtitelGenerator:
         self,
         audio_file_path: str | Path,
         speeches: list[Subtitels],
-        target: bool = True,
     ) -> None:
         """
         file_generate create file with subtitels.
@@ -124,7 +120,7 @@ class SubtitelGenerator:
             Return nthing. CREATE FILE!
         """
         return self.file_generater.generate(
-            audio_file_path=audio_file_path, speeches=speeches, target=target
+            audio_file_path=audio_file_path, speeches=speeches
         )
 
     @timer
@@ -142,7 +138,11 @@ class SubtitelGenerator:
         list[Subtitels]
             list of times with speeches (text)
         """
-        return self.translater.generate(speeches=speeches)
+        return (
+            self.translater.generate(speeches=speeches)
+            if self.translater
+            else speeches
+        )
 
     @timer
     def generate(self, audio_file_path: str | Path) -> None:
@@ -154,10 +154,10 @@ class SubtitelGenerator:
         audio_file_path : str | Path
             path to audio file, where we need generate subtitels
         """
-        subtitels = self.vad_generate(audio_file_path=audio_file_path)
-
+        timesamps_speeches = self.vad_generate(audio_file_path=audio_file_path)
         subtitels = self.stt_generate(
-            audio_file_path=audio_file_path, timesamps_speeches=subtitels
+            audio_file_path=audio_file_path,
+            timesamps_speeches=timesamps_speeches,
         )
 
         subtitels = self.translate(speeches=subtitels)

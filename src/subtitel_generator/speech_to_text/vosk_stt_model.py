@@ -15,7 +15,7 @@ from pathlib import Path
 from pydub import AudioSegment
 from vosk import KaldiRecognizer, Model
 
-from subtitel_generator.subtitel_model import Subtitels
+from subtitel_generator.subtitel_model import Subtitels, Timestamps
 from subtitel_generator.utils.logger import get_logger
 
 from .base import BaseSTT
@@ -26,7 +26,6 @@ class VoskSTT(BaseSTT):
 
     def _path_to_model(self) -> str:
         """Path to model."""
-        self.logger.debug("Start loading model")
         path = Path(__file__).parent.parent.parent.parent / "models" / "vosk"
         print(f"model path {path}")
         self.logger.debug(f"choice this model {os.listdir(path)}")
@@ -73,7 +72,14 @@ class VoskSTT(BaseSTT):
         )
 
     def _load_audio(self, audio_file: str | Path) -> None:
-        """Load audio file."""
+        """
+        _load_audio.
+
+        Parameters
+        ----------
+        audio_file : str | Path
+            path to audio file.
+        """
         audio_file = Path(audio_file)
         if self.wf:
             self.wf.close()
@@ -102,6 +108,26 @@ class VoskSTT(BaseSTT):
     def _get_audio_segment_data(
         self, start_sec: float, end_sec: float
     ) -> bytes:
+        """
+        _get_audio_segment_data.
+
+        Parameters
+        ----------
+        start_sec : float
+            start seconds
+        end_sec : float
+            end seconds
+
+        Returns
+        -------
+        bytes
+            audio fragment
+
+        Raises
+        ------
+        RuntimeError
+            if audio file not loaded
+        """
         if not self.wf or not self.frame_rate or not self.nframes:
             raise RuntimeError(
                 "Audio file not loaded. Please load audio file first."
@@ -125,13 +151,29 @@ class VoskSTT(BaseSTT):
         return self.wf.readframes(num_frames_to_read)
 
     def generate(
-        self, audio_file_path: str | Path, timestamps_speeches: list[Subtitels]
+        self,
+        audio_file_path: str | Path,
+        timestamps_speeches: list[Timestamps],
     ) -> list[Subtitels]:
-        """STT generate for audio."""
+        """
+        Generate text from audio file.
+
+        Parameters
+        ----------
+        audio_file_path : str | Path
+            path to audio file
+        timestamps_speeches : list[Timestamps]
+            list of speeches, when need text
+
+        Returns
+        -------
+        list[Subtitels]
+            subtitels. Language is Video Subtitle.
+        """
         try:
             self._load_audio(audio_file_path)
 
-            updated_timestamps_speech: list[Subtitels] = []
+            subtitels: list[Subtitels] = []
 
             for i, segment in enumerate(timestamps_speeches):
                 segment_start = segment["start"]
@@ -152,12 +194,16 @@ class VoskSTT(BaseSTT):
 
                 recognized_text = result.get("text", "").strip()
 
-                updated_timestamps_speech.append(
+                if recognized_text == "":
+                    self.logger.warning(
+                        "Text is empty. {segment_start:.2f}-{segment_end:.2f}s"
+                    )
+
+                subtitels.append(
                     Subtitels(
                         start=segment_start,
                         end=segment_end,
                         text=recognized_text,
-                        target="",
                     )
                 )
                 self.logger.debug(
@@ -169,4 +215,4 @@ class VoskSTT(BaseSTT):
             if self.wf:
                 self.wf.close()
                 self.wf = None
-        return updated_timestamps_speech
+        return subtitels

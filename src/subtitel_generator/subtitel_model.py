@@ -22,4 +22,19 @@ class Subtitels(TypedDict):
     start: float
     end: float
     text: str
-    target: str
+
+
+class Timestamps(TypedDict):
+    """
+    Timestamps is a dict of timestamps.
+
+    PARAMS
+    ------
+    start: float
+        Start time of the subtitle text in seconds.
+    end: float
+        End time of the subtitle text in seconds.
+    """
+
+    start: float
+    end: float
