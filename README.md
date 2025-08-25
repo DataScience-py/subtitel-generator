@@ -3,7 +3,6 @@
 A Python project for generating subtitles from audio files using Voice Activity Detection (VAD) and Speech-to-Text (STT) models.
 
 > The subtitle language matches the language of the selected Vosk model. Subtitles can be generated for any language supported by both Vosk and Silero-VAD models.
-> Currently, there is no translation module, so speech is transcribed to text in the original language only.
 
 
 ---
@@ -28,8 +27,6 @@ A Python project for generating subtitles from audio files using Voice Activity 
 
 - **The subtitle language is determined by the Vosk model you use.**  
   Subtitles can be generated for any language supported by both Vosk and Silero-VAD.
-- **No translation module is implemented yet.**  
-  Speech is transcribed to text in the original language only.
 
 ---
 
